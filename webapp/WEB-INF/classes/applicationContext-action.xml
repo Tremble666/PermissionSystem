@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	
+	<!-- 配置action:注意：类型一定要是多例，不然里面的成员变量每次都是老的，没有更新!!! -->
+	<bean id="employeeAction" class="com.chenjin.Web.Action.EmployeeAction" scope="prototype">
+		<property name="empService" ref="empService"/>
+		<property name="deptService" ref="deptService"/>
+		<property name="roleService" ref="roleService"/>
+	</bean>
+	
+	<bean id="departmentAction" class="com.chenjin.Web.Action.DepartmentAction" scope="prototype">
+		<property name="deptService" ref="deptService"/>
+	</bean>
+	
+	<bean id="permissionAction" class="com.chenjin.Web.Action.PermissionAction" scope="prototype">
+		<property name="permissionService" ref="permissionService"/>
+	</bean>
+	
+	<bean id="roleAction" class="com.chenjin.Web.Action.RoleAction" scope="prototype">
+		<property name="roleService" ref="roleService"/>
+		<property name="permissionService" ref="permissionService"/>
+	</bean>
+	
+	<bean id="loginAction" class="com.chenjin.Web.Action.LoginAction" scope="prototype">
+		<property name="empService" ref="empService"/>
+	</bean>
+</beans>

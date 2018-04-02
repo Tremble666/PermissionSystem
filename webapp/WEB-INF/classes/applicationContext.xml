@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 整体配置 -->
+	<import resource="classpath:applicationContext-action.xml"/>
+	<import resource="classpath:applicationContext-dao.xml"/>
+	<import resource="classpath:applicationContext-service.xml"/>
+	
+	
+	<!-- 配置数据库连接属性占位符占位符 -->
+	<context:property-placeholder location="classpath:Druid.properties" />
+	<!-- 配置连接池 -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	
+	<!-- 配置sessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 管理连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+				hibernate.show_sql=true
+				hibernate.hbm2ddl.auto=update
+			</value>
+		</property>
+		<!-- 配置文件的位置 -->
+		<property name="mappingLocations" value="classpath:com/chenjin/domain/*.hbm.xml"/>
+	</bean>
+	
+	<!-- what:配置hibernate的事务管理器 -->
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- when: 通用的crud增强-->
+	<tx:advice transaction-manager="txManager" id="crudAdivce">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<tx:method name="query*" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- where:对哪些方法做增强 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.chenjin.service.*Service.*(..))" id="txPoint"/>
+		<aop:advisor advice-ref="crudAdivce" pointcut-ref="txPoint"/>
+	</aop:config>
+	
+</beans>

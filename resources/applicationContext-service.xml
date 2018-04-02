@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 配置service -->
+	<bean id="empService" class="com.chenjin.service.Impl.EmployeeService">
+		<property name="empDAO" ref="empDAO"/>
+	</bean>
+	<bean id="deptService" class="com.chenjin.service.Impl.DepartmentService">
+		<property name="deptDAO" ref="deptDAO"/>
+	</bean>
+	<bean id="permissionService" class="com.chenjin.service.Impl.PermissionService">
+		<property name="permissionDAO" ref="permissionDAO"/>
+	</bean>
+	<bean id="roleService" class="com.chenjin.service.Impl.RoleService">
+		<property name="roleDAO" ref="roleDAO"/>
+	</bean>
+</beans>

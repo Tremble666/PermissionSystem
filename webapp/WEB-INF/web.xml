@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+	
+	<!-- 加载配置文件的路径 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	
+	<!-- 启动tomcat，就启动spring容器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener </listener-class>
+	</listener>
+	
+	
+	<!-- OSIV模式:在用户请求时开启session,表现曾返回数据后关闭session，防止hibernate的延迟加载对象出现的no session问题 -->
+	<filter>
+        <filter-name>OSIV</filter-name>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OSIV</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    
+	
+	<!-- 配置前端控制器 -->
+	 <filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+</web-app>

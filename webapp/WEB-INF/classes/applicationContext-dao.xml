@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- bean元素的继承 -->
+	<bean id="baseDAO" abstract="true">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- 配置dao -->
+	<bean id="empDAO" class="com.chenjin.dao.Impl.EmployeeDAOImpl" parent="baseDAO"/>	
+	<bean id="deptDAO" class="com.chenjin.dao.Impl.DepartmentDAOImpl" parent="baseDAO"/>
+	<bean id="permissionDAO" class="com.chenjin.dao.Impl.PermissionDAOImpl" parent="baseDAO"/>
+	<bean id="roleDAO" class="com.chenjin.dao.Impl.RoleDAOImpl" parent="baseDAO"/>
+</beans>
